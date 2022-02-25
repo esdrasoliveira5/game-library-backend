@@ -1,5 +1,4 @@
 import Express, { Request, Response } from 'express';
-import Rescue from 'express-rescue';
 import Cors from 'cors';
 import HandleError from './middlewares/HandleError';
 import UserRouter from './routers/UserRouter';
@@ -13,7 +12,7 @@ app.get('/', async (req: Request, resp: Response) => resp.status(200).json({
   message: 'API OLINE!!',
 }));
 
-app.use('/user', Rescue(UserRouter));
+app.use('/user', UserRouter);
 
 app.use(HandleError.HandleError);
 
