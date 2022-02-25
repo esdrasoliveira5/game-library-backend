@@ -1,0 +1,16 @@
+1 npm init -y
+2 npm install -D typescript
+3 npm install -D @types/node
+4 npm install -D ts-node-dev
+5 npm install express
+6 npm install -D @types/express
+7 npm install dotenv
+8 npm express-async-errors
+9 npm install -D jsonwebtoken
+10 npm install -D @types/jsonwebtoken
+11 npm install -D prisma {
+  npx prisma init : iniciar Prisma
+  npx prisma migrate dev --name CreateUser: Criar migration apos ter adicionado no schema
+  npx prisma format : formatar as conexoes
+  npx prisma studio : npx prisma studio
+}
