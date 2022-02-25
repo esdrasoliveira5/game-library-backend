@@ -12,6 +12,15 @@ const create = async (req: Request, resp: Response) => {
   return resp.status(status).json(response);
 };
 
+const login = async (req: Request, resp: Response) => {
+  const { email, password } = req.body as Omit<User, 'id, name, lastName, picture'>;
+
+  const { status, response } = await UserService.login({ email, password });
+
+  return resp.status(status).json(response);
+};
+
 export default {
   create,
+  login,
 };

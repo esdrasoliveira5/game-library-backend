@@ -7,12 +7,11 @@ import UserRouter from './routers/UserRouter';
 const app = Express();
 
 app.use(Cors());
+app.use(Express.json());
 
 app.get('/', async (req: Request, resp: Response) => resp.status(200).json({
   message: 'API OLINE!!',
 }));
-
-app.use(Express.json());
 
 app.use('/user', Rescue(UserRouter));
 

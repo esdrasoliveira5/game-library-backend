@@ -7,3 +7,15 @@ export interface StatusInterface {
 export interface ResponseUser extends StatusInterface {
   response: User
 }
+
+export interface ResponseError extends StatusInterface {
+  response: {
+    error: string,
+  }
+}
+
+export interface ResponseToken extends StatusInterface {
+  response: {
+    token: string,
+  }
+}
