@@ -11,7 +11,7 @@ const create = async (data: Omit<User, 'id'>): Promise<User> => {
   return response;
 };
 
-const login = async (data: Omit<User, 'id' | 'name' | 'lastName' | 'picture' | 'password'>): 
+const getUser = async (data: Omit<User, 'id' | 'name' | 'lastName' | 'avatar' | 'password'>): 
 Promise<User | null> => {
   const response = await Client.user.findUnique({
     where: {
@@ -23,5 +23,5 @@ Promise<User | null> => {
 
 export default {
   create,
-  login,
+  getUser,
 };

@@ -16,6 +16,6 @@ export interface ResponseError extends StatusInterface {
 
 export interface ResponseToken extends StatusInterface {
   response: {
-    token: string,
+    token: string | undefined
   }
 }
