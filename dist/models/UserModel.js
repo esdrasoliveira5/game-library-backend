@@ -8,22 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const HandleError_1 = __importDefault(require("./middlewares/HandleError"));
-const UserRouter_1 = __importDefault(require("./routers/UserRouter"));
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.get('/', (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    return resp.status(200).json({
-        message: 'API OLINE!!',
+const client_1 = require("@prisma/client");
+const Client = new client_1.PrismaClient();
+const create = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield Client.user.create({
+        data: Object.assign({}, data),
     });
-}));
-app.use('/user', UserRouter_1.default);
-app.use(HandleError_1.default.HandleError);
-exports.default = app;
+    return response;
+});
+const getUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield Client.user.findUnique({
+        where: {
+            email: data.email,
+        },
+    });
+    return response;
+});
+exports.default = {
+    create,
+    getUser,
+};
