@@ -12,20 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const HandleError_1 = __importDefault(require("./middlewares/HandleError"));
-const UserRouter_1 = __importDefault(require("./routers/UserRouter"));
-const FavoritesRoutes_1 = __importDefault(require("./routers/FavoritesRoutes"));
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.get('/', (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    return resp.status(200).json({
-        message: 'API OLINE!!',
-    });
-}));
-app.use('/user', UserRouter_1.default);
-app.use('/favorites', FavoritesRoutes_1.default);
-app.use(HandleError_1.default.HandleError);
-exports.default = app;
+const FavoritesServices_1 = __importDefault(require("../services/FavoritesServices"));
+const create = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { idGame, name, image } = req.body;
+    const { authorization } = req.headers;
+    const data = { idGame, name, image };
+    const { status, response } = yield FavoritesServices_1.default.create(authorization, data);
+    return resp.status(status).json(response);
+});
+exports.default = {
+    create,
+};

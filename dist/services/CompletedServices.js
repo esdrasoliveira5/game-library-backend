@@ -12,20 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const HandleError_1 = __importDefault(require("./middlewares/HandleError"));
-const UserRouter_1 = __importDefault(require("./routers/UserRouter"));
-const FavoritesRoutes_1 = __importDefault(require("./routers/FavoritesRoutes"));
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.get('/', (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    return resp.status(200).json({
-        message: 'API OLINE!!',
-    });
-}));
-app.use('/user', UserRouter_1.default);
-app.use('/favorites', FavoritesRoutes_1.default);
-app.use(HandleError_1.default.HandleError);
-exports.default = app;
+const StatusCode_1 = __importDefault(require("../enum/StatusCode"));
+const tokenValidation_1 = __importDefault(require("../helpers/tokenValidation"));
+const CompletedModel_1 = __importDefault(require("../models/CompletedModel"));
+const GamesModel_1 = __importDefault(require("../models/GamesModel"));
+const create = (token, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const validationToken = yield (0, tokenValidation_1.default)(token);
+    if ('status' in validationToken)
+        return validationToken;
+    const gameResponse = yield GamesModel_1.default.create(data);
+    const completedData = {
+        userId: validationToken.id,
+        gamesId: gameResponse.id,
+    };
+    const completedResponse = yield CompletedModel_1.default.create(completedData);
+    return { status: StatusCode_1.default.OK, response: completedResponse };
+});
+exports.default = {
+    create,
+};

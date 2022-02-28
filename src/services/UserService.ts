@@ -10,41 +10,41 @@ import UserModel from '../models/UserModel';
 
 const create = async (data: Omit<User, 'id'>): Promise<ResponseToken | ResponseError> => {
   const { name, lastName, email, password, avatar } = data;
-  const validation = createValidation(data);
+  const validation: ResponseError | void = createValidation(data);
   if (validation) return validation;
   
-  const hashedPassword = await passwordCrypt.hashIt(password);
-  const { id } = await UserModel.create({
+  const hashedPassword: string = await passwordCrypt.hashIt(password);
+  const { id }: User = await UserModel.create({
     name, lastName, email, password: hashedPassword, avatar,
   });
   
-  const token = tokenGenerate(id, email);
+  const token: string = tokenGenerate(id, email);
   return { status: StatusCode.CREATED, response: { token } };
 };
 
 const login = async (data: Omit<User, 'id' | 'name' | 'lastName' | 'avatar'>):
 Promise<ResponseToken | ResponseError> => {
   const { email, password } = data;
-  const validation = loginValidate(email, password);
+  const validation: ResponseError | void = loginValidate(email, password);
   if (validation) return validation;
 
-  const result = await UserModel.getUser({ email });
+  const result: User | null = await UserModel.getUser({ email });
   if (result === null) {
     return { status: StatusCode.NOT_FOUND, response: { error: 'Invalid email' } };
   }
 
-  const hashedPassword = await passwordCrypt.compareIt(password, result.password);
+  const hashedPassword: boolean = await passwordCrypt.compareIt(password, result.password);
   if (!hashedPassword) {
     return { status: StatusCode.UNAUTHORIZED, response: { error: 'Invalid password' } };
   }
 
-  const token = tokenGenerate(result.id, email);
+  const token: string = tokenGenerate(result.id, email);
   return { status: StatusCode.OK, response: { token } };
 };
 
 const getUser = async (token: string | undefined):
 Promise<ResponseToken | ResponseError> => {
-  const validationToken = await tokenValidation(token);
+  const validationToken: ResponseError | User = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
   return { status: StatusCode.OK, response: { token } };
 };

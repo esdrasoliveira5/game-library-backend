@@ -6,7 +6,7 @@ async function hashIt(password: string): Promise<string> {
   return hashed;
 }
 
-async function compareIt(password: string, hashedPassword: string) {
+async function compareIt(password: string, hashedPassword: string): Promise<boolean> {
   const validPassword = await bcrypt.compare(password, hashedPassword);
   return validPassword;
 }
