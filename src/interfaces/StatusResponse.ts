@@ -1,4 +1,4 @@
-import { Favorites, User } from '@prisma/client';
+import { Collections, User } from '@prisma/client';
 
 export interface StatusInterface {
   status: number,
@@ -20,6 +20,6 @@ export interface ResponseToken extends StatusInterface {
   }
 }
 
-export interface ResponseFavorites extends StatusInterface {
-  response: Favorites
+export interface ResponseCollections extends StatusInterface {
+  response: Collections
 }

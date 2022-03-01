@@ -1,7 +1,6 @@
 -- CreateTable
 CREATE TABLE "Games" (
-    "id" SERIAL NOT NULL,
-    "idGame" INTEGER NOT NULL,
+    "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "image" TEXT NOT NULL,
 
@@ -9,4 +8,4 @@ CREATE TABLE "Games" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Games_idGame_key" ON "Games"("idGame");
+CREATE UNIQUE INDEX "Games_id_key" ON "Games"("id");
