@@ -12,8 +12,10 @@ datasource db {
 
 model Categories {
   id         Int           @id @default(autoincrement())
-  name       String        @unique
+  name       String        
   collection Collections[]
+  User       User         @relation(fields: [userId], references: [id])
+  userId     String
 }
 
 model User {
@@ -24,6 +26,7 @@ model User {
   password    String
   avatar      String
   collections Collections[]
+  categories  Categories[]
 }
 
 model Games {
@@ -34,12 +37,12 @@ model Games {
 }
 
 model Collections {
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String
-  games   Games  @relation(fields: [gamesId], references: [id])
-  gamesId Int
-  Categories   Categories? @relation(fields: [categoriesId], references: [id])
-  categoriesId Int?
-  
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+  games        Games       @relation(fields: [gamesId], references: [id])
+  gamesId      Int
+  Categories   Categories @relation(fields: [categoriesId], references: [id])
+  categoriesId Int
+
   @@id([userId, gamesId])
 }

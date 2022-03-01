@@ -11,10 +11,24 @@ const create = async (data: Omit<Categories, 'id'>): Promise<Categories> => {
   return response;
 };
 
-const find = async (data: Omit<Categories, 'id'>): Promise<Categories | null> => {
-  const response = await Client.categories.findUnique({
+const find = async (data: Omit<Categories, 'id'>): Promise<Categories | undefined> => {
+  const response = await Client.categories.findMany({
     where: {
-      name: data.name,
+      userId: {
+        equals: data.userId,
+      },
+      name: {
+        equals: data.name,
+      },
+    },
+  });
+  return response[0];
+};
+
+const getAll = async (data: Omit<Categories, 'id' | 'name'>): Promise<Categories[] | undefined> => {
+  const response = await Client.categories.findMany({
+    where: {
+      userId: data.userId,
     },
   });
   return response;
@@ -23,4 +37,5 @@ const find = async (data: Omit<Categories, 'id'>): Promise<Categories | null> =>
 export default {
   create,
   find,
+  getAll,
 };

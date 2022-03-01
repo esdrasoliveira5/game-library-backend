@@ -3,6 +3,7 @@ import Cors from 'cors';
 import HandleError from './middlewares/HandleError';
 import UserRouter from './routers/UserRouter';
 import CollectionRouter from './routers/CollectionRouter';
+import CategoriesRouter from './routers/CategoriesRouter.ts';
 
 const app = Express();
 
@@ -15,6 +16,7 @@ app.get('/', async (_req: Request, resp: Response) => resp.status(200).json({
 
 app.use('/user', UserRouter);
 app.use('/collections', CollectionRouter);
+app.use('/categories', CategoriesRouter);
 
 app.use(HandleError.HandleError);
 

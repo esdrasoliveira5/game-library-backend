@@ -13,7 +13,7 @@ Promise<ResponseCollections | ResponseError> => {
   if ('status' in validationToken) return validationToken;
 
   const game: Games = await createGame(data);
-  const categorie = await createCategorie({ name: 'Sem categoria' });
+  const categorie = await createCategorie({ name: 'Sem categoria', userId: validationToken.id });
   
   const collectionData: Collections = {
     userId: validationToken.id, 

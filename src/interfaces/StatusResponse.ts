@@ -1,4 +1,4 @@
-import { Collections, User } from '@prisma/client';
+import { Categories, Collections, User } from '@prisma/client';
 
 export interface StatusInterface {
   status: number,
@@ -22,4 +22,8 @@ export interface ResponseToken extends StatusInterface {
 
 export interface ResponseCollections extends StatusInterface {
   response: Collections
+}
+
+export interface ResponseCategories extends StatusInterface {
+  response: Categories[] | Categories
 }
