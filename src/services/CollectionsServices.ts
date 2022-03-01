@@ -4,7 +4,7 @@ import collectionExists from '../helpers/collectionExists';
 import createCategorie from '../helpers/createCategorieIfNotExist';
 import createGame from '../helpers/createGameIfnotExist';
 import tokenValidation from '../helpers/tokenValidation';
-import { ResponseCollections, ResponseError } from '../interfaces/StatusResponse';
+import { ResponseCollections, ResponseError, ResponseUpdate } from '../interfaces/StatusResponse';
 import CollectionsModel from '../models/CollectionsModel';
 
 const create = async (token: string | undefined, data: Games):
@@ -45,7 +45,45 @@ Promise<ResponseCollections | ResponseError> => {
   return { status: StatusCode.CREATED, response: collection };
 };
 
+const update = async (token: string | undefined, data: Omit<Collections, 'userId'>):
+Promise<ResponseUpdate | ResponseError> => {
+  const validationToken: User | ResponseError = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+  
+  const collectionData: Collections = {
+    userId: validationToken.id, 
+    gamesId: data.gamesId,
+    categoriesId: data.categoriesId,
+  };
+
+  const collection = await CollectionsModel.update(collectionData);
+  if (collection.count === 0) {
+    return { status: StatusCode.NOT_FOUND, response: { error: 'Game not found in collection' } };
+  }
+  return { status: StatusCode.CREATED, response: collection };
+};
+
+const deleteC = async (token: string | undefined, data: Omit<Collections, 'userId'>):
+Promise<ResponseUpdate | ResponseError> => {
+  const validationToken: User | ResponseError = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+  
+  const collectionData: Collections = {
+    userId: validationToken.id, 
+    gamesId: data.gamesId,
+    categoriesId: data.categoriesId,
+  };
+
+  const collection = await CollectionsModel.deleteC(collectionData);
+  if (collection.count === 0) {
+    return { status: StatusCode.NOT_FOUND, response: { error: 'Game not found in collection' } };
+  }
+  return { status: StatusCode.CREATED, response: collection };
+};
+
 export default {
   create,
   find,
+  update,
+  deleteC,
 };

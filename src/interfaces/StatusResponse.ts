@@ -1,4 +1,4 @@
-import { Categories, Collections, User } from '@prisma/client';
+import { Categories, Collections, Prisma, User } from '@prisma/client';
 
 export interface StatusInterface {
   status: number,
@@ -26,4 +26,8 @@ export interface ResponseCollections extends StatusInterface {
 
 export interface ResponseCategories extends StatusInterface {
   response: Categories[] | Categories
+}
+
+export interface ResponseUpdate extends StatusInterface {
+  response: Prisma.BatchPayload
 }
