@@ -29,6 +29,23 @@ Promise<ResponseCollections | ResponseError> => {
   return { status: StatusCode.CREATED, response: newCollection };
 };
 
+const find = async (token: string | undefined, data: Omit<Games, 'name' | 'image'>):
+Promise<ResponseCollections | ResponseError> => {
+  const validationToken: User | ResponseError = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+
+  const collectionData: Omit<Collections, 'categoriesId'> = {
+    userId: validationToken.id, 
+    gamesId: data.id,
+  };
+
+  const collection = await collectionExists(collectionData);
+  if ('status' in collection) return collection;
+
+  return { status: StatusCode.CREATED, response: collection };
+};
+
 export default {
   create,
+  find,
 };

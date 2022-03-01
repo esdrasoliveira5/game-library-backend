@@ -11,7 +11,8 @@ const create = async (data: Collections): Promise<Collections > => {
   return response;
 };
 
-const find = async (data: Collections): Promise<Collections[] | undefined> => {
+const find = async (data: Omit<Collections, 'categoriesId'>):
+Promise<Collections[] | undefined> => {
   const response = await Client.collections.findMany({
     where: {
       userId: {

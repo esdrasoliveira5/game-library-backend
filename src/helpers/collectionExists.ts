@@ -3,7 +3,8 @@ import StatusCode from '../enum/StatusCode';
 import { ResponseError } from '../interfaces/StatusResponse';
 import CollectionsModel from '../models/CollectionsModel';
 
-const collectionExists = async (data: Collections): Promise<Collections | ResponseError> => {
+const collectionExists = async (data: Omit<Collections, 'categoriesId'>):
+Promise<Collections | ResponseError> => {
   const collection: Collections[] | undefined = await CollectionsModel.find(data);
   
   if (collection === undefined || collection[0] === undefined) {
