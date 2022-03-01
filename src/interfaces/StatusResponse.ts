@@ -28,6 +28,6 @@ export interface ResponseCategories extends StatusInterface {
   response: Categories[] | Categories
 }
 
-export interface ResponseUpdate extends StatusInterface {
+export interface ResponseUpdateDelete extends StatusInterface {
   response: Prisma.BatchPayload
 }

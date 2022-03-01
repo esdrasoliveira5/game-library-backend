@@ -7,5 +7,6 @@ const router = Router();
 
 router.post('/', CategoriesController.create);
 router.get('/', CategoriesController.getAll);
+router.delete('/delete', CategoriesController.deleteC);
 
 export default router;

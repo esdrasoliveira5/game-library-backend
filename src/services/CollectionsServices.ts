@@ -1,10 +1,14 @@
 import { Collections, Games, User } from '@prisma/client';
 import StatusCode from '../enum/StatusCode';
 import collectionExists from '../helpers/collectionExists';
-import createCategorie from '../helpers/createCategorieIfNotExist';
 import createGame from '../helpers/createGameIfnotExist';
 import tokenValidation from '../helpers/tokenValidation';
-import { ResponseCollections, ResponseError, ResponseUpdate } from '../interfaces/StatusResponse';
+import {
+  ResponseCollections, 
+  ResponseError, 
+  ResponseUpdateDelete,
+} from '../interfaces/StatusResponse';
+import CategoriesModel from '../models/CategoriesModel';
 import CollectionsModel from '../models/CollectionsModel';
 
 const create = async (token: string | undefined, data: Games):
@@ -13,12 +17,12 @@ Promise<ResponseCollections | ResponseError> => {
   if ('status' in validationToken) return validationToken;
 
   const game: Games = await createGame(data);
-  const categorie = await createCategorie({ name: 'Sem categoria', userId: validationToken.id });
+  await CategoriesModel.createMany({ userId: validationToken.id });
   
   const collectionData: Collections = {
     userId: validationToken.id, 
     gamesId: game.id,
-    categoriesId: categorie.id,
+    categoriesId: 1,
   };
   const collection = await collectionExists(collectionData);
   if ('userId' in collection) {
@@ -46,7 +50,7 @@ Promise<ResponseCollections | ResponseError> => {
 };
 
 const update = async (token: string | undefined, data: Omit<Collections, 'userId'>):
-Promise<ResponseUpdate | ResponseError> => {
+Promise<ResponseUpdateDelete | ResponseError> => {
   const validationToken: User | ResponseError = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
   
@@ -64,7 +68,7 @@ Promise<ResponseUpdate | ResponseError> => {
 };
 
 const deleteC = async (token: string | undefined, data: Omit<Collections, 'userId'>):
-Promise<ResponseUpdate | ResponseError> => {
+Promise<ResponseUpdateDelete | ResponseError> => {
   const validationToken: User | ResponseError = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
   
