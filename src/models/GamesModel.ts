@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Games, PrismaClient } from '@prisma/client';
 
 const Client = new PrismaClient();
@@ -21,7 +22,34 @@ Promise<Games | null> => {
   return response;
 };
 
+export interface GameUser {
+  idGame: number,
+  userId: string,
+}
+
+const getUserGame = async (data:GameUser) => {
+  const response = await Client.games.findMany({
+    where: {
+      idGame: {
+        equals: data.idGame,
+      },
+      uncompleted: {
+        some: {
+          userId: data.userId,
+        },
+      },
+    },
+    select: {
+      favorites: true,
+      uncompleted: true,
+      completed: true,
+    },
+  });
+  return response;
+};
+
 export default {
   create,
   getGame,
+  getUserGame,
 };

@@ -22,8 +22,10 @@ Promise<ResponseFavorites | ResponseError> => {
     userId: validationToken.id, 
     gamesId: game.id,
   };
-  const getFavorited = await gameFavorited(favoritesData);
-  if (getFavorited === null) return { status: StatusCode.BAD_REQUEST, response: ERR_FAVORITED };
+
+  const gameFav = await gameFavorited(favoritesData);
+  
+  if (gameFav !== undefined) return { status: StatusCode.BAD_REQUEST, response: ERR_FAVORITED };
 
   const favoriteResponse : Favorites = await FavoritesModel.create(favoritesData);
   return { status: StatusCode.CREATED, response: favoriteResponse };

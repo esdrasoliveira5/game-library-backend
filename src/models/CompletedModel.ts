@@ -12,7 +12,7 @@ const create = async (data: Omit<Completed, 'id'>) => {
 };
 
 const getOne = async (data: Omit<Completed, 'id'>):
-Promise<Completed[] | null> => {
+Promise<Completed[] | undefined> => {
   const response = await Client.completed.findMany({
     where: {
       userId: {

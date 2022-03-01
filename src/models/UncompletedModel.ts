@@ -12,7 +12,7 @@ const create = async (data: Omit<Uncompleted, 'id'>) => {
 };
 
 const getOne = async (data: Omit<Uncompleted, 'id'>):
-Promise<Uncompleted[] | null> => {
+Promise<Uncompleted[] | undefined> => {
   const response = await Client.uncompleted.findMany({
     where: {
       userId: {

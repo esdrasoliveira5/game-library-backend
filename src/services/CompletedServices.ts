@@ -23,11 +23,11 @@ Promise<ResponseFavorites | ResponseError> => {
     gamesId: gameValid.id,
   };
 
-  const getCompleted = await gameCompleted(completedData);
-  if (getCompleted === null) return { status: StatusCode.BAD_REQUEST, response: ERR_COMPLETED };
+  const gameC = await gameCompleted(completedData);
+  if (gameC !== undefined) return { status: StatusCode.BAD_REQUEST, response: ERR_COMPLETED };
   
-  const getUncompleted = await gameUncompleted(completedData);
-  if (getUncompleted === null) return { status: StatusCode.BAD_REQUEST, response: ERR_INCOMPLETED };
+  const gameU = await gameUncompleted(completedData);
+  if (gameU !== undefined) return { status: StatusCode.BAD_REQUEST, response: ERR_INCOMPLETED };
   
   const completedResponse : Completed = await CompletedModel.create(completedData);
   return { status: StatusCode.OK, response: completedResponse };

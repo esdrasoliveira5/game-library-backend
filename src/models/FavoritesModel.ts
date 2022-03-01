@@ -12,7 +12,7 @@ const create = async (data: Omit<Favorites, 'id'>) : Promise<Favorites> => {
 };
 
 const getOne = async (data: Omit<Favorites, 'id'>):
-Promise<Favorites[] | null> => {
+Promise<Favorites[] | undefined> => {
   const response = await Client.favorites.findMany({
     where: {
       userId: {
