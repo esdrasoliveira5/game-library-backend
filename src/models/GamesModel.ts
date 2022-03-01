@@ -11,7 +11,7 @@ const create = async (data: Omit<Games, 'id'>): Promise<Games> => {
   return response;
 };
 
-const getGame = async (data: Omit<Games, 'id' | 'name' | 'image'>):
+const getGame = async (data: Omit<Games, 'id' | 'image' | 'name'>):
 Promise<Games | null> => {
   const response = await Client.games.findUnique({
     where: {

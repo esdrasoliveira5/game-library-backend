@@ -11,18 +11,16 @@ const create = async (data: Omit<Completed, 'id'>) => {
   return response;
 };
 
-const getCompleted = async (data: Omit<Completed, 'id'>):
-Promise<Completed | null> => {
-  const response = await Client.completed.findFirst({
+const getOne = async (data: Omit<Completed, 'id'>):
+Promise<Completed[] | null> => {
+  const response = await Client.completed.findMany({
     where: {
-      AND: [
-        {
-          userId: data.userId,
-        },
-        {
-          gamesId: data.gamesId,
-        },
-      ],
+      userId: {
+        equals: data.userId,
+      },
+      gamesId: {
+        equals: data.gamesId,
+      },
     },
   });
   return response;
@@ -30,5 +28,5 @@ Promise<Completed | null> => {
 
 export default {
   create,
-  getCompleted,
+  getOne,
 };

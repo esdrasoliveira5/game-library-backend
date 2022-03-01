@@ -6,5 +6,6 @@ import FavoritesController from '../controllers/FavoritesController';
 const router = Router();
 
 router.post('/', FavoritesController.create);
+router.get('/:id', FavoritesController.getOne);
 
 export default router;

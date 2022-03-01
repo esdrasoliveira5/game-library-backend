@@ -5,7 +5,7 @@ import loginValidate from '../helpers/loginValidate';
 import passwordCrypt from '../helpers/passwordCrypt';
 import tokenGenerate from '../helpers/tokenGenerate';
 import tokenValidation from '../helpers/tokenValidation';
-import { ResponseError, ResponseToken } from '../interfaces/StatusResponse';
+import { ResponseError, ResponseToken, ResponseUser } from '../interfaces/StatusResponse';
 import UserModel from '../models/UserModel';
 
 const create = async (data: Omit<User, 'id'>): Promise<ResponseToken | ResponseError> => {
@@ -43,10 +43,11 @@ Promise<ResponseToken | ResponseError> => {
 };
 
 const getUser = async (token: string | undefined):
-Promise<ResponseToken | ResponseError> => {
+Promise<ResponseUser | ResponseError> => {
   const validationToken: ResponseError | User = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
-  return { status: StatusCode.OK, response: { token } };
+
+  return { status: StatusCode.OK, response: validationToken };
 };
 
 export default {

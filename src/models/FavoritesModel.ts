@@ -11,18 +11,16 @@ const create = async (data: Omit<Favorites, 'id'>) : Promise<Favorites> => {
   return response;
 };
 
-const getFavorite = async (data: Omit<Favorites, 'id'>):
-Promise<Favorites | null> => {
-  const response = await Client.favorites.findFirst({
+const getOne = async (data: Omit<Favorites, 'id'>):
+Promise<Favorites[] | null> => {
+  const response = await Client.favorites.findMany({
     where: {
-      AND: [
-        {
-          userId: data.userId,
-        },
-        {
-          gamesId: data.gamesId,
-        },
-      ],
+      userId: {
+        equals: data.userId,
+      },
+      gamesId: {
+        equals: data.gamesId,
+      },
     },
   });
   return response;
@@ -30,5 +28,5 @@ Promise<Favorites | null> => {
 
 export default {
   create,
-  getFavorite,
+  getOne,
 };

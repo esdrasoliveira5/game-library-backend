@@ -11,7 +11,7 @@ const app = Express();
 app.use(Cors());
 app.use(Express.json());
 
-app.get('/', async (req: Request, resp: Response) => resp.status(200).json({
+app.get('/', async (_req: Request, resp: Response) => resp.status(200).json({
   message: 'API OLINE!!',
 }));
 

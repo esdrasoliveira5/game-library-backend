@@ -6,5 +6,6 @@ import CompletedControllers from '../controllers/CompletedControllers';
 const router = Router();
 
 router.post('/', CompletedControllers.create);
+router.get('/:id', CompletedControllers.getOne);
 
 export default router;

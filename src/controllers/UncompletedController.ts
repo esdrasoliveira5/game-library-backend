@@ -15,6 +15,19 @@ const create = async (req: Request, resp: Response) => {
   return resp.status(status).json(response);
 };
 
+const getOne = async (req: Request, resp: Response) => {
+  const { id } = req.params;
+  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
+  const idGame = Number(id);
+  const { status, response }: 
+  ResponseError | ResponseFavorites = await UncompletedServices.getOne(authorization, {
+    idGame,
+  });
+
+  return resp.status(status).json(response);
+};
+
 export default {
   create,
+  getOne,
 };
