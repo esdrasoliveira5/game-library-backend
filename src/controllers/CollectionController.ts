@@ -41,8 +41,8 @@ const update = async (req: Request, resp: Response) => {
 
 const deleteC = async (req: Request, resp: Response) => {
   const { authorization }: IncomingHttpHeaders | undefined = req.headers;
-  const { gamesId, categoriesId } = req.body as Omit<Collections, 'userId'>; 
-  const data = { gamesId, categoriesId };
+  const { gamesId } = req.body as Omit<Collections, 'userId'>; 
+  const data = { gamesId };
 
   const { status, response }:
   ResponseUpdateDelete | ResponseError = await CollectionsServices.deleteC(authorization, data);

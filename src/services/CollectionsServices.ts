@@ -2,13 +2,13 @@ import { Collections, Games, User } from '@prisma/client';
 import StatusCode from '../enum/StatusCode';
 import collectionExists from '../helpers/collectionExists';
 import createGame from '../helpers/createGameIfnotExist';
+import initialCategories from '../helpers/createInitialCategories';
 import tokenValidation from '../helpers/tokenValidation';
 import {
   ResponseCollections, 
   ResponseError, 
   ResponseUpdateDelete,
 } from '../interfaces/StatusResponse';
-import CategoriesModel from '../models/CategoriesModel';
 import CollectionsModel from '../models/CollectionsModel';
 
 const create = async (token: string | undefined, data: Games):
@@ -17,12 +17,13 @@ Promise<ResponseCollections | ResponseError> => {
   if ('status' in validationToken) return validationToken;
 
   const game: Games = await createGame(data);
-  await CategoriesModel.createMany({ userId: validationToken.id });
+  const findData = { name: 'Sem Categoria', userId: validationToken.id };
+  const iCategory = await initialCategories(findData);
   
   const collectionData: Collections = {
     userId: validationToken.id, 
     gamesId: game.id,
-    categoriesId: 1,
+    categoriesId: iCategory === undefined ? 1 : iCategory.id,
   };
   const collection = await collectionExists(collectionData);
   if ('userId' in collection) {
@@ -67,15 +68,17 @@ Promise<ResponseUpdateDelete | ResponseError> => {
   return { status: StatusCode.CREATED, response: collection };
 };
 
-const deleteC = async (token: string | undefined, data: Omit<Collections, 'userId'>):
+const deleteC = async (
+  token: string | undefined,
+  data: Omit<Collections, 'userId' | 'categoriesId'>,
+):
 Promise<ResponseUpdateDelete | ResponseError> => {
   const validationToken: User | ResponseError = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
   
-  const collectionData: Collections = {
+  const collectionData: Omit<Collections, 'categoriesId'> = {
     userId: validationToken.id, 
     gamesId: data.gamesId,
-    categoriesId: data.categoriesId,
   };
 
   const collection = await CollectionsModel.deleteC(collectionData);

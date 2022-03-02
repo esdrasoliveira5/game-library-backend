@@ -4,7 +4,6 @@ import { IncomingHttpHeaders } from 'http2';
 import {
   ResponseCategories,
   ResponseError,
-  ResponseUpdateDelete,
 } from '../interfaces/StatusResponse';
 import CategoriesService from '../services/CategoriesService';
 
@@ -27,10 +26,11 @@ const getAll = async (req: Request, resp: Response) => {
 
 const deleteC = async (req: Request, resp: Response) => {
   const { authorization }: IncomingHttpHeaders | undefined = req.headers;
-  const { name } = req.body as Omit<Categories, 'id' | 'userId'>; 
-  
+  const { id } = req.params;
+  const data = { id: Number(id) };
+
   const { status, response }:
-  ResponseUpdateDelete | ResponseError = await CategoriesService.deleteC(authorization, { name });
+  ResponseCategories | ResponseError = await CategoriesService.deleteC(authorization, data);
   return resp.status(status).json(response);
 };
 

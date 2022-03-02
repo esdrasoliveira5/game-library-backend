@@ -43,7 +43,7 @@ const update = async (data: Collections): Promise<Prisma.BatchPayload> => {
   return response;
 };
 
-const deleteC = async (data: Collections):
+const deleteC = async (data: Omit<Collections, 'categoriesId'>):
 Promise<Prisma.BatchPayload> => {
   const response = await Client.collections.deleteMany({
     where: {

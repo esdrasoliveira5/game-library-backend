@@ -1,4 +1,4 @@
-import { Categories, Prisma, PrismaClient } from '@prisma/client';
+import { Categories, PrismaClient } from '@prisma/client';
 
 const Client = new PrismaClient();
 
@@ -16,7 +16,7 @@ const createMany = async (data: Omit<Categories, 'id' | 'name'>) => {
     data: [
       { name: 'Sem Categoria', userId: data.userId },
       { name: 'Jogando', userId: data.userId },
-      { name: 'Completei', userId: data.userId },
+      { name: 'Completo', userId: data.userId },
       { name: 'Não joguei', userId: data.userId },
     ],
     skipDuplicates: true, 
@@ -38,6 +38,15 @@ const find = async (data: Omit<Categories, 'id'>): Promise<Categories | undefine
   return response[0];
 };
 
+const findById = async (data: Omit<Categories, 'name' | 'userId'>): Promise<Categories | null> => {
+  const response = await Client.categories.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+  return response;
+};
+
 const getAll = async (data: Omit<Categories, 'id' | 'name'>): Promise<Categories[] | undefined> => {
   const response = await Client.categories.findMany({
     where: {
@@ -47,15 +56,11 @@ const getAll = async (data: Omit<Categories, 'id' | 'name'>): Promise<Categories
   return response;
 };
 
-const deleteC = async (data: Omit<Categories, 'id' >): Promise<Prisma.BatchPayload> => {
-  const response = await Client.categories.deleteMany({
+const deleteC = async (data: Omit<Categories, 'name' | 'userId' >):
+Promise<Categories> => {
+  const response = await Client.categories.delete({
     where: {
-      name: {
-        equals: data.name,
-      },
-      userId: {
-        equals: data.userId,
-      },
+      id: data.id,
     },
   });
   return response;
@@ -65,6 +70,7 @@ export default {
   create,
   createMany,
   find,
+  findById,
   getAll,
   deleteC,
 };
