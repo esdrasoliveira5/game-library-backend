@@ -68,6 +68,43 @@ Promise<ResponseUpdateDelete | ResponseError> => {
   return { status: StatusCode.CREATED, response: collection };
 };
 
+const getAll = async (token: string | undefined):
+Promise<ResponseCollections | ResponseError> => {
+  const validationToken: User | ResponseError = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+
+  const collectionData: Omit<Collections, 'gamesId' | 'categoriesId'> = {
+    userId: validationToken.id, 
+  };
+
+  const collection = await CollectionsModel.getAll(collectionData);
+  
+  if (collection === undefined) {
+    return { status: StatusCode.NOT_FOUND, response: { error: 'Collections empty' } };
+  }
+  return { status: StatusCode.CREATED, response: collection };
+};
+
+const getAllByCategory = async (
+  token: string | undefined,
+  data: Omit<Collections, 'userId' | 'gamesId'>,
+): Promise<ResponseCollections | ResponseError> => {
+  const validationToken: User | ResponseError = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+
+  const collectionData: Omit<Collections, 'gamesId'> = {
+    userId: validationToken.id, 
+    categoriesId: data.categoriesId,
+  };
+
+  const collection = await CollectionsModel.getAllByCategory(collectionData);
+  
+  if (collection === undefined) {
+    return { status: StatusCode.NOT_FOUND, response: { error: 'Collections empty' } };
+  }
+  return { status: StatusCode.CREATED, response: collection };
+};
+
 const deleteC = async (
   token: string | undefined,
   data: Omit<Collections, 'userId' | 'categoriesId'>,
@@ -91,6 +128,8 @@ Promise<ResponseUpdateDelete | ResponseError> => {
 export default {
   create,
   find,
+  getAll,
+  getAllByCategory,
   update,
   deleteC,
 };

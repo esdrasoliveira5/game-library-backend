@@ -26,6 +26,45 @@ Promise<Collections[] | undefined> => {
   return response;
 };
 
+const getAll = async (data: Omit<Collections, 'gamesId' | 'categoriesId'>):
+Promise<Collections[] | undefined> => {
+  const response = await Client.collections.findMany({
+    where: {
+      userId: {
+        equals: data.userId,
+      },
+    },
+    select: {
+      userId: true,
+      gamesId: true,
+      categoriesId: true,
+      games: true,
+    },
+  });
+  return response;
+};
+
+const getAllByCategory = async (data: Omit<Collections, 'gamesId'>):
+Promise<Collections[] | undefined> => {
+  const response = await Client.collections.findMany({
+    where: {
+      userId: {
+        equals: data.userId,
+      },
+      categoriesId: {
+        equals: data.categoriesId,
+      },
+    },
+    select: {
+      userId: true,
+      gamesId: true,
+      categoriesId: true,
+      games: true,
+    },
+  });
+  return response;
+};
+
 const update = async (data: Collections): Promise<Prisma.BatchPayload> => {
   const response = await Client.collections.updateMany({
     where: {
@@ -60,6 +99,8 @@ Promise<Prisma.BatchPayload> => {
 export default {
   create,
   find,
+  getAll,
+  getAllByCategory,
   update,
   deleteC,
 };

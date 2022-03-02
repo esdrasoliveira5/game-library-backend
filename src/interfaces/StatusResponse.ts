@@ -1,11 +1,12 @@
 import { Categories, Collections, Prisma, User } from '@prisma/client';
+import { UserSelectInterface } from './UserInterface';
 
 export interface StatusInterface {
   status: number,
 }
 
 export interface ResponseUser extends StatusInterface {
-  response: User
+  response: User | UserSelectInterface
 }
 
 export interface ResponseError extends StatusInterface {
@@ -21,7 +22,7 @@ export interface ResponseToken extends StatusInterface {
 }
 
 export interface ResponseCollections extends StatusInterface {
-  response: Collections
+  response: Collections | Collections[]
 }
 
 export interface ResponseCategories extends StatusInterface {

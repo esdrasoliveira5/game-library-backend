@@ -29,6 +29,27 @@ const find = async (req: Request, resp: Response) => {
   return resp.status(status).json(response);
 };
 
+const getAll = async (req: Request, resp: Response) => {
+  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
+
+  const { status, response }:
+  ResponseCollections | ResponseError = await CollectionsServices.getAll(authorization);
+  return resp.status(status).json(response);
+};
+
+const getAllByCategory = async (req: Request, resp: Response) => {
+  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
+  const { id } = req.params;
+  const data = { categoriesId: Number(id) };
+
+  const { status, response }:
+  ResponseCollections | ResponseError = await CollectionsServices.getAllByCategory(
+    authorization, 
+    data,
+  );
+  return resp.status(status).json(response);
+};
+
 const update = async (req: Request, resp: Response) => {
   const { authorization }: IncomingHttpHeaders | undefined = req.headers;
   const { gamesId, categoriesId } = req.body as Omit<Collections, 'userId'>; 
@@ -52,6 +73,8 @@ const deleteC = async (req: Request, resp: Response) => {
 export default {
   create,
   find,
+  getAll,
+  getAllByCategory,
   update,
   deleteC,
 };

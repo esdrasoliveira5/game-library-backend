@@ -46,8 +46,14 @@ const getUser = async (token: string | undefined):
 Promise<ResponseUser | ResponseError> => {
   const validationToken: ResponseError | User = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
+  const user = {
+    name: validationToken.name,
+    lastName: validationToken.lastName,
+    email: validationToken.email,
+    avatar: validationToken.avatar,
+  };
 
-  return { status: StatusCode.OK, response: validationToken };
+  return { status: StatusCode.OK, response: user };
 };
 
 export default {
