@@ -31,21 +31,25 @@ const find = async (req: Request, resp: Response) => {
 
 const getAll = async (req: Request, resp: Response) => {
   const { authorization }: IncomingHttpHeaders | undefined = req.headers;
-
+  const { page } = req.params;
   const { status, response }:
-  ResponseCollections | ResponseError = await CollectionsServices.getAll(authorization);
+  ResponseCollections | ResponseError = await CollectionsServices.getAll(
+    authorization, 
+    Number(page),
+  );
   return resp.status(status).json(response);
 };
 
 const getAllByCategory = async (req: Request, resp: Response) => {
   const { authorization }: IncomingHttpHeaders | undefined = req.headers;
-  const { id } = req.params;
+  const { id, page } = req.params;
   const data = { categoriesId: Number(id) };
 
   const { status, response }:
   ResponseCollections | ResponseError = await CollectionsServices.getAllByCategory(
     authorization, 
     data,
+    Number(page),
   );
   return resp.status(status).json(response);
 };

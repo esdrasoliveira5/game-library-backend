@@ -68,7 +68,7 @@ Promise<ResponseUpdateDelete | ResponseError> => {
   return { status: StatusCode.CREATED, response: collection };
 };
 
-const getAll = async (token: string | undefined):
+const getAll = async (token: string | undefined, page: number):
 Promise<ResponseCollections | ResponseError> => {
   const validationToken: User | ResponseError = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
@@ -77,7 +77,7 @@ Promise<ResponseCollections | ResponseError> => {
     userId: validationToken.id, 
   };
 
-  const collection = await CollectionsModel.getAll(collectionData);
+  const collection = await CollectionsModel.getAll(collectionData, page);
   
   if (collection === undefined) {
     return { status: StatusCode.NOT_FOUND, response: { error: 'Collections empty' } };
@@ -88,6 +88,7 @@ Promise<ResponseCollections | ResponseError> => {
 const getAllByCategory = async (
   token: string | undefined,
   data: Omit<Collections, 'userId' | 'gamesId'>,
+  page: number,
 ): Promise<ResponseCollections | ResponseError> => {
   const validationToken: User | ResponseError = await tokenValidation(token);
   if ('status' in validationToken) return validationToken;
@@ -97,7 +98,7 @@ const getAllByCategory = async (
     categoriesId: data.categoriesId,
   };
 
-  const collection = await CollectionsModel.getAllByCategory(collectionData);
+  const collection = await CollectionsModel.getAllByCategory(collectionData, page);
   
   if (collection === undefined) {
     return { status: StatusCode.NOT_FOUND, response: { error: 'Collections empty' } };

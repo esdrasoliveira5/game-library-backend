@@ -26,9 +26,11 @@ Promise<Collections[] | undefined> => {
   return response;
 };
 
-const getAll = async (data: Omit<Collections, 'gamesId' | 'categoriesId'>):
+const getAll = async (data: Omit<Collections, 'gamesId' | 'categoriesId'>, page: number):
 Promise<Collections[] | undefined> => {
   const response = await Client.collections.findMany({
+    skip: page,
+    take: 20,
     where: {
       userId: {
         equals: data.userId,
@@ -44,16 +46,14 @@ Promise<Collections[] | undefined> => {
   return response;
 };
 
-const getAllByCategory = async (data: Omit<Collections, 'gamesId'>):
+const getAllByCategory = async (data: Omit<Collections, 'gamesId'>, page: number):
 Promise<Collections[] | undefined> => {
   const response = await Client.collections.findMany({
+    skip: page,
+    take: 20,
     where: {
-      userId: {
-        equals: data.userId,
-      },
-      categoriesId: {
-        equals: data.categoriesId,
-      },
+      userId: { equals: data.userId },
+      categoriesId: { equals: data.categoriesId },
     },
     select: {
       userId: true,
