@@ -43,18 +43,31 @@
     git clone git@github.com:esdrasoliveira5/game-library-backend.git
 - Vá para a pasta da aplicação
   ```sh
-    cd Smith-Shop-API
+    cd game-library-backend
 
 ## Instruções para iniciar o projeto
 
 <br>
 
-- Remova o .Exemple do nome do arquivo .env.
-
 - Comando para iniciar
 
   ```sh
     sudo docker-compose up
+
+- Instalar dependencias
+
+  ```sh
+    npm install
+
+- Configurar prisma client
+
+  ```sh
+    npx prisma generate
+
+- Gerar bacno de dados
+
+  ```sh
+    npx prisma migrate dev
 
 <br/>
 
@@ -77,19 +90,20 @@
   <br/>
 
 ### **Registrar usuário**
-##### `POST` /users
+##### `POST` /user
 <br/>
 
   Esse endpoint registra um usuário e retorna um objeto com um token.
 
   - Exemplo `request body` 
     ``` json
-        {
-          "username": "user",
-          "classe": "knight",
-          "level": 1,
-          "password": "password"
-        }
+      {
+          "name": "name",
+          "lastName": "lastname",
+          "email": "email@email.com",
+          "password": "123456789",
+          "avatar": "imageurl"
+      }
     ```
 
   - Exemplo `response body`
@@ -101,7 +115,7 @@
 <br/>
 
 ### **Logar usuário** 
-##### `POST` /login
+##### `POST` /user/login
   <br/>
 
   Esse endpoint valida o login do usuário e retorna um objeto com um  token.
@@ -109,8 +123,10 @@
   - Exemplo `request body` 
     ``` json
       {
-        "username": "user",
-        "password": "password"
+        {
+          "email": "email@email.com",
+          "password": "123456789",
+        }
       }
     ```
 
@@ -122,11 +138,14 @@
     ```
   <br/>
 
-### **Cadastrar um produto**
-##### `POST` /products
+### **Atualizar usuário**
+##### `PUT` /user/update
   <br/>
 
-  Esse endpoint cadastra um produto e retorna um objeto com o produto cadastrado.
+  Este endpoint atualiza os dados de um usuário e retorna os dados atualizados.
+
+  *Obs: Apenas o usuário que criou o usuario pode atualizar.* 
+  *Obs2: Apenas os campos email e id nao podem ser atualizados.* 
 
   - Exemplo `request headers`
       ```json
@@ -137,28 +156,50 @@
   - Exemplo `request body` 
     ``` json
       {
-        "name": "Poção de cura",
-        "amount": "20 gold",
+          "name": "name",
+          "lastName": "lastname",
+          "email": "email@email.com",
+          "password": "123456789",
+          "avatar": "imageurl"
       }
     ```
 
   - Exemplo `response body`
     ```json
-      {
-        "item": {
-          "id": 1,
-          "name": "Poção de cura",
-          "amount": "20 gold",
+        {
+            "id": "0aef7d0c-7c21-4c68-85d4-05007b69fd06",
+            "name": "name",
+            "lastName": "lastname",
+            "email": "email@email.com",
+            "password": "$2b$06$CDrEn2xq88mZ77kWfdTAoe/scDxlph8x0w9ggClUNhC9T3fZ7cul2",
+            "avatar": "imageurl"
         }
-      }
     ```
   <br/>
 
-### **Listar todos os produtos**
-##### `GET` /products
+### **Deletar usuário**
+##### `DELETE` /user/delete
   <br/>
 
-  Esse endpoint lista todos os produtos e retorna um array.
+  Esse endpoint deleta um usuário cadastrado e nao retorna conteúdo.
+
+  *Obs: Apenas o usuário que criou o usuario pode deletar.* 
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  <br/>
+
+### **Buscar usuário**
+##### `GET` /user
+  <br/>
+
+  Esse endpoint busca um usuario cadastrado pelo token.
+  
 
   - Exemplo `request headers`
       ```json
@@ -169,28 +210,20 @@
 
   - Exemplo `response body`
     ```json
-      [
-        {
-          "id": 1,
-          "name": "Poção de cura",
-          "amount": "20 gold",
-          "orderId": null
-        },
-        {
-          "id": 2,
-          "name": "Escudo do Herói",
-          "amount": "100 diamond",
-          "orderId": 1
-        }
-      ]
+      {
+          "name": "name",
+          "lastName": "lastname",
+          "email": "email@email.com",
+          "avatar": "imageurl"
+      }
     ```
   <br/>
 
-### **Cadastrar um pedido**
-##### `POST` /orders
+### **Criar categoria**
+##### `POST` /categories
   <br/>
 
-  Esse endpoint cadastra um pedido, e retorna um objeto.
+  Esse endpoint cria e retorna uma categoria.
 
   - Exemplo `request headers`
       ```json
@@ -200,52 +233,29 @@
       ```
 
   - Exemplo `request body` 
-    ``` json
+    ```json
       {
-        "products": [1, 2]
+          "name": "categorie1"
       }
     ```
-
-
+    
   - Exemplo `response body`
     ```json
       {
-        "order": {
-          "userId": 1,
-          "products": [1, 2]
-        }
-      }
-    ```
-  <br/>
-
-### **Consultar um pedido**
-##### `GET` /orders/:id
-  <br/>
-
-  Esse endpoint retorna um pedido especificado pelo id e retorna um objeto.
-
-  - Exemplo `request headers`
-      ```json
-      {
-        "Authorization": "(Bearer Token)"
+          "id": 18,
+          "name": "categorie1",
+          "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
       }
       ```
-
-  - Exemplo `response body`
-    ```json
-      {
-        "id": 1,
-        "userId": 2,
-        "products": [1, 2]
-      }
-    ```
   <br/>
 
-### **Listar todos os pedidos**
-##### `GET` /orders
+### **Listar todas as categorias relacionadas ao usuário**
+##### `GET` /categories
   <br/>
 
   Esse endpoint lista todos os pedidos e os retorna em um array.
+  
+  *Obs: Retorna apenas as categorias criadas pelo usuario.* 
 
   - Exemplo `request headers`
     ```json
@@ -257,17 +267,249 @@
   - Exemplo `response body`
     ```json
         [
-          {
-            "id": 1,
-            "userId": 2,
-            "products": [1, 2]
-          },
-          {
-            "id": 2,
-            "userId": 2,
-            "products": [3, 1, 4]
-          }
+            {
+                "id": 13,
+                "name": "Sem categoria",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            },
+            {
+                "id": 14,
+                "name": "Jogando",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            },
+            {
+                "id": 15,
+                "name": "Completo",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            },
+            {
+                "id": 16,
+                "name": "Não joguei",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            },
+            {
+                "id": 17,
+                "name": "testeGame2",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            },
+            {
+                "id": 18,
+                "name": "categorie1",
+                "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736"
+            }
         ]
     ```
   <br/>
+  
+### **Adiciona um game a coleção**
+##### `POST` /collections
+  <br/>
 
+  Esse endpoint adiciona um game a coleção do usuário.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `request body` 
+    ```json
+      {
+          "id": 12345,
+          "name": "game1",
+          "image": "image"
+      }
+      ```
+    
+  - Exemplo `response body`
+    ```json
+        {
+          "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+          "gamesId": 12345,
+          "categoriesId": 13
+        }
+      ```
+  <br/>
+
+  
+### **Atualiza a categoria de uma coleção**
+##### `PUT` /collections/update
+  <br/>
+
+  Esse endpoint atualiza a categoria de um game na coleção do usuário e retorna os dados atualizados.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `request body` 
+    ```json
+        {
+            "gamesId": 12345,
+            "categoriesId": 1
+        }
+      ```
+    
+  - Exemplo `response body`
+    ```json
+        {
+            "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+            "gamesId": 12345,
+            "categoriesId": 1
+        }
+      ```
+  <br/>
+
+  
+### **Deleta um game de uma coleção**
+##### `DELETE` /collections/delete
+  <br/>
+
+  Esse endpoint deleta um game de uma coleção.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `request body` 
+    ```json
+        {
+            "gamesId": 12345,
+        }
+      ```
+  <br/>
+
+
+  
+### **Lista  uma coleção**
+##### `GET` /collections/:id
+  <br/>
+
+  Esse endpoint lista uma coleção pelo id do game.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `request body` 
+    ```json
+      {
+          "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+          "gamesId": 12345,
+          "categoriesId": 13
+      }
+      ```
+  <br/>
+
+
+
+### **Lista todas as coleções de um usuário**
+##### `GET` /collections/user/:page
+  <br/>
+
+  Esse endpoint retorna todas as coleções que pertencem ao usuario do token em paginas de até 20 objetos.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `response body`
+    ```json
+      [
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 12345,
+              "categoriesId": 3,
+              "games": {
+                  "id": 12345,
+                  "name": "game1",
+                  "image": "image"
+              }
+          },
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 12435,
+              "categoriesId": 2,
+              "games": {
+                  "id": 12435,
+                  "name": "game2",
+                  "image": "image2"
+              }
+          },
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 13423,
+              "categoriesId": 1,
+              "games": {
+                  "id": 13423,
+                  "name": "game4",
+                  "image": "image4"
+              }
+          },
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 13435,
+              "categoriesId": 1,
+              "games": {
+                  "id": 13435,
+                  "name": "game3",
+                  "image": "image3"
+              }
+          }
+      ]
+      ```
+  <br/>
+    
+### **Lista todas as coleções de um usuário pela categoria**
+##### `GET` /collections/user/:page/:id
+  <br/>
+
+  Esse endpoint retorna todas as coleções que pertencem ao usuario relacionadas a categoria em paginas de até 20 objetos.
+
+  - Exemplo `request headers`
+      ```json
+      {
+        "Authorization": "(Bearer Token)"
+      }
+      ```
+
+  - Exemplo `response body`
+    ```json
+      [
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 13423,
+              "categoriesId": 1,
+              "games": {
+                  "id": 13423,
+                  "name": "game4",
+                  "image": "image4"
+              }
+          },
+          {
+              "userId": "38000780-44bc-488a-bd17-3c3c7dd0a736",
+              "gamesId": 13435,
+              "categoriesId": 1,
+              "games": {
+                  "id": 13435,
+                  "name": "game3",
+                  "image": "image3"
+              }
+          }
+      ]
+      ```
+  <br/>

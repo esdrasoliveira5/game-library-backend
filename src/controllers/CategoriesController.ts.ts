@@ -24,18 +24,7 @@ const getAll = async (req: Request, resp: Response) => {
   return resp.status(status).json(response);
 };
 
-const deleteC = async (req: Request, resp: Response) => {
-  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
-  const { id } = req.params;
-  const data = { id: Number(id) };
-
-  const { status, response }:
-  ResponseCategories | ResponseError = await CategoriesService.deleteC(authorization, data);
-  return resp.status(status).json(response);
-};
-
 export default {
   create,
   getAll,
-  deleteC,
 };

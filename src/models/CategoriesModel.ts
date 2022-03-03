@@ -56,21 +56,10 @@ const getAll = async (data: Omit<Categories, 'id' | 'name'>): Promise<Categories
   return response;
 };
 
-const deleteC = async (data: Omit<Categories, 'name' | 'userId' >):
-Promise<Categories> => {
-  const response = await Client.categories.delete({
-    where: {
-      id: data.id,
-    },
-  });
-  return response;
-};
-
 export default {
   create,
   createMany,
   find,
   findById,
   getAll,
-  deleteC,
 };
