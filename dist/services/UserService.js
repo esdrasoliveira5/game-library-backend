@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const StatusCode_1 = __importDefault(require("../enum/StatusCode"));
+const createInitialCategories_1 = __importDefault(require("../helpers/createInitialCategories"));
 const createValidation_1 = __importDefault(require("../helpers/createValidation"));
 const loginValidate_1 = __importDefault(require("../helpers/loginValidate"));
 const passwordCrypt_1 = __importDefault(require("../helpers/passwordCrypt"));
@@ -25,10 +26,12 @@ const create = (data) => __awaiter(void 0, void 0, void 0, function* () {
     if (validation)
         return validation;
     const hashedPassword = yield passwordCrypt_1.default.hashIt(password);
-    const { id } = yield UserModel_1.default.create({
+    const user = yield UserModel_1.default.create({
         name, lastName, email, password: hashedPassword, avatar,
     });
-    const token = (0, tokenGenerate_1.default)(id, email);
+    const findData = { name: 'Sem categoria', userId: user.id };
+    yield (0, createInitialCategories_1.default)(findData);
+    const token = (0, tokenGenerate_1.default)(user.id, email);
     return { status: StatusCode_1.default.CREATED, response: { token } };
 });
 const login = (data) => __awaiter(void 0, void 0, void 0, function* () {

@@ -23,7 +23,7 @@ const create = (token, data) => __awaiter(void 0, void 0, void 0, function* () {
     if ('status' in validationToken)
         return validationToken;
     const game = yield (0, createGameIfnotExist_1.default)(data);
-    const findData = { name: 'Sem Categoria', userId: validationToken.id };
+    const findData = { name: 'Sem categoria', userId: validationToken.id };
     const iCategory = yield (0, createInitialCategories_1.default)(findData);
     const collectionData = {
         userId: validationToken.id,

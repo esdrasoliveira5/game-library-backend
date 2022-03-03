@@ -9,12 +9,17 @@
 - [Documentação](#Documentação)
   - [Verificar o estado da Api](#Verificar-o-estado-da-Api)
   - [Registrar usuário](#Registrar-usuário)
-  - [Logar usuário](#Logar-usuário) 
-  - [Cadastrar um produto](#Cadastrar-um-produto)
-  - [Listar todos os produtos](#Listar-todos-os-produtos)
-  - [Cadastrar um pedido](#Cadastrar-um-pedido)
-  - [Consultar-um-pedido](#Consultar-um-pedido)
-  - [Listar todos os pedidos](#Listar-todos-os-pedidos)
+  - [Atualizar usuário](#Atualizar-usuário) 
+  - [Deletar usuário](#Deletar-usuário)
+  - [Buscar usuário](#Buscar-usuário)
+  - [Criar categoria](#Criar-categoria)
+  - [Listar todas as categorias relacionadas ao usuário](#Listar-todas-as-categorias-relacionadas-ao-usuário)
+  - [Adiciona um game a coleção](#Adiciona-um-game-a-coleção)
+  - [Atualiza a categoria de uma coleção](#Atualiza-a-categoria-de-uma-coleção)
+  - [Deleta um game de uma coleção](#Deleta-um-game-de-uma-coleção)
+  - [Lista uma coleção](#Lista-uma-coleção)
+  - [Lista todas as coleções de um usuário](#Lista-todas-as-coleções-de-um-usuário)
+  - [Lista todas as coleções de um usuário pela categoria](#Lista-todas-as-coleções-de-um-usuário-pela-categoria)
 
 
 <br>
@@ -41,20 +46,39 @@
 - Clone o repositório
   ```sh
     git clone git@github.com:esdrasoliveira5/game-library-backend.git
+
 - Vá para a pasta da aplicação
   ```sh
-    cd Smith-Shop-API
+    cd game-library-backend
+
+- Instale as dependencias
+  ```sh
+    npm install
+
 
 ## Instruções para iniciar o projeto
 
 <br>
 
-- Remova o .Exemple do nome do arquivo .env.
-
-- Comando para iniciar
+- Comando para iniciar o container com o banco de dados
 
   ```sh
     sudo docker-compose up
+
+- Comando para iniciar a aplicação
+
+  ```sh
+    npm run start
+
+- Criar o client do prisma
+
+  ```sh
+    npx prisma generate
+
+- Adicionar as tabelas no banco de dados
+
+  ```sh
+    npx prisma migrate dev
 
 <br/>
 
