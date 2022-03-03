@@ -5,7 +5,12 @@ import loginValidate from '../helpers/loginValidate';
 import passwordCrypt from '../helpers/passwordCrypt';
 import tokenGenerate from '../helpers/tokenGenerate';
 import tokenValidation from '../helpers/tokenValidation';
-import { ResponseError, ResponseToken, ResponseUser } from '../interfaces/StatusResponse';
+import {
+  ResponseError,
+  ResponseNoContent,
+  ResponseToken,
+  ResponseUser,
+} from '../interfaces/StatusResponse';
 import UserModel from '../models/UserModel';
 
 const create = async (data: Omit<User, 'id'>): Promise<ResponseToken | ResponseError> => {
@@ -56,8 +61,35 @@ Promise<ResponseUser | ResponseError> => {
   return { status: StatusCode.OK, response: user };
 };
 
+const updateUser = async (token: string | undefined, data: Omit<User, 'id' | 'email'>):
+Promise<ResponseUser | ResponseError> => {
+  const { name, lastName, password, avatar } = data;
+
+  const validationToken: ResponseError | User = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+  
+  const hashedPassword: string = await passwordCrypt.hashIt(password);
+  const user = await UserModel.updateUser({
+    id: validationToken.id, name, lastName, password: hashedPassword, avatar,
+  });
+
+  return { status: StatusCode.OK, response: user };
+};
+
+const deleteUser = async (token: string | undefined):
+Promise<ResponseNoContent | ResponseError> => {
+  const validationToken: ResponseError | User = await tokenValidation(token);
+  if ('status' in validationToken) return validationToken;
+  
+  await UserModel.deleteUser(validationToken.id);
+
+  return { status: StatusCode.NO_CONTENT, response: undefined };
+};
+
 export default {
   create,
   login,
   getUser,
+  updateUser,
+  deleteUser,
 };

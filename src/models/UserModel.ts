@@ -21,7 +21,41 @@ Promise<User | null> => {
   return response;
 };
 
+const updateUser = async (data: Omit<User, 'email'>): Promise<User> => {
+  const response = await Client.user.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      ...data,
+    },
+  });
+  return response;
+};
+
+const deleteUser = async (id: string) => {
+  await Client.collections.deleteMany({
+    where: {
+      userId: { equals: id },
+    },
+  });
+
+  await Client.categories.deleteMany({
+    where: {
+      userId: { equals: id },
+    },
+  });
+
+  await Client.user.delete({
+    where: {
+      id,
+    },
+  });
+};
+
 export default {
   create,
   getUser,
+  updateUser,
+  deleteUser,
 };

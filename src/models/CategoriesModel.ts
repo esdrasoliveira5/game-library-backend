@@ -14,7 +14,7 @@ const create = async (data: Omit<Categories, 'id'>): Promise<Categories> => {
 const createMany = async (data: Omit<Categories, 'id' | 'name'>) => {
   const response = await Client.categories.createMany({
     data: [
-      { name: 'Sem Categoria', userId: data.userId },
+      { name: 'Sem categoria', userId: data.userId },
       { name: 'Jogando', userId: data.userId },
       { name: 'Completo', userId: data.userId },
       { name: 'Não joguei', userId: data.userId },

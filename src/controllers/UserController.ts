@@ -1,7 +1,12 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import { IncomingHttpHeaders } from 'http';
-import { ResponseError, ResponseToken, ResponseUser } from '../interfaces/StatusResponse';
+import {
+  ResponseError,
+  ResponseNoContent,
+  ResponseToken,
+  ResponseUser,
+} from '../interfaces/StatusResponse';
 import UserService from '../services/UserService';
 
 const create = async (req: Request, resp: Response) => {
@@ -32,8 +37,30 @@ const getUser = async (req: Request, resp: Response) => {
   return resp.status(status).json(response);
 };
 
+const updateUser = async (req: Request, resp: Response) => {
+  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
+  const { name, lastName, password, avatar } = req.body as Omit<User, 'id' | 'email'>;
+
+  const { status, response }:
+  ResponseUser | ResponseError = await UserService.updateUser(authorization, {
+    name, lastName, password, avatar,
+  });
+
+  return resp.status(status).json(response);
+};
+
+const deleteUser = async (req: Request, resp: Response) => {
+  const { authorization }: IncomingHttpHeaders | undefined = req.headers;
+  const { status, response }:
+  ResponseNoContent | ResponseError = await UserService.deleteUser(authorization);
+
+  return resp.status(status).json(response);
+};
+
 export default {
   create,
   login,
   getUser,
+  updateUser,
+  deleteUser,
 };

@@ -32,3 +32,7 @@ export interface ResponseCategories extends StatusInterface {
 export interface ResponseUpdateDelete extends StatusInterface {
   response: Prisma.BatchPayload
 }
+
+export interface ResponseNoContent extends StatusInterface {
+  response: undefined,
+}
