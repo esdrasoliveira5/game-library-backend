@@ -8,24 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-const Client = new client_1.PrismaClient();
-const create = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield Client.games.create({
-        data: Object.assign({}, data),
-    });
-    return response;
-});
-const getGame = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield Client.games.findUnique({
-        where: {
-            id: data.id,
-        },
-    });
-    return response;
-});
-exports.default = {
-    create,
-    getGame,
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+const StatusCode_1 = __importDefault(require("../enum/StatusCode"));
+const CollectionsModel_1 = __importDefault(require("../models/CollectionsModel"));
+const collectionExists = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const collection = yield CollectionsModel_1.default.find(data);
+    if (collection === undefined || collection[0] === undefined) {
+        return { status: StatusCode_1.default.BAD_REQUEST, response: { error: 'Game not in Collection' } };
+    }
+    return collection[0];
+});
+exports.default = collectionExists;

@@ -25,7 +25,35 @@ const getUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return response;
 });
+const updateUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield Client.user.update({
+        where: {
+            id: data.id,
+        },
+        data: Object.assign({}, data),
+    });
+    return response;
+});
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    yield Client.collections.deleteMany({
+        where: {
+            userId: { equals: id },
+        },
+    });
+    yield Client.categories.deleteMany({
+        where: {
+            userId: { equals: id },
+        },
+    });
+    yield Client.user.delete({
+        where: {
+            id,
+        },
+    });
+});
 exports.default = {
     create,
     getUser,
+    updateUser,
+    deleteUser,
 };

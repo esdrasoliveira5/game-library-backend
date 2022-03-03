@@ -51,10 +51,36 @@ const getUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const validationToken = yield (0, tokenValidation_1.default)(token);
     if ('status' in validationToken)
         return validationToken;
-    return { status: StatusCode_1.default.OK, response: { token } };
+    const user = {
+        name: validationToken.name,
+        lastName: validationToken.lastName,
+        email: validationToken.email,
+        avatar: validationToken.avatar,
+    };
+    return { status: StatusCode_1.default.OK, response: user };
+});
+const updateUser = (token, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, lastName, password, avatar } = data;
+    const validationToken = yield (0, tokenValidation_1.default)(token);
+    if ('status' in validationToken)
+        return validationToken;
+    const hashedPassword = yield passwordCrypt_1.default.hashIt(password);
+    const user = yield UserModel_1.default.updateUser({
+        id: validationToken.id, name, lastName, password: hashedPassword, avatar,
+    });
+    return { status: StatusCode_1.default.OK, response: user };
+});
+const deleteUser = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const validationToken = yield (0, tokenValidation_1.default)(token);
+    if ('status' in validationToken)
+        return validationToken;
+    yield UserModel_1.default.deleteUser(validationToken.id);
+    return { status: StatusCode_1.default.NO_CONTENT, response: undefined };
 });
 exports.default = {
     create,
     login,
     getUser,
+    updateUser,
+    deleteUser,
 };

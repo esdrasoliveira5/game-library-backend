@@ -16,16 +16,18 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const HandleError_1 = __importDefault(require("./middlewares/HandleError"));
 const UserRouter_1 = __importDefault(require("./routers/UserRouter"));
-const FavoritesRoutes_1 = __importDefault(require("./routers/FavoritesRoutes"));
+const CollectionRouter_1 = __importDefault(require("./routers/CollectionRouter"));
+const CategoriesRouter_ts_1 = __importDefault(require("./routers/CategoriesRouter.ts"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.get('/', (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/', (_req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     return resp.status(200).json({
         message: 'API OLINE!!',
     });
 }));
 app.use('/user', UserRouter_1.default);
-app.use('/favorites', FavoritesRoutes_1.default);
+app.use('/collections', CollectionRouter_1.default);
+app.use('/categories', CategoriesRouter_ts_1.default);
 app.use(HandleError_1.default.HandleError);
 exports.default = app;

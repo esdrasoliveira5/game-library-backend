@@ -12,41 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UserService_1 = __importDefault(require("../services/UserService"));
+const CategoriesService_1 = __importDefault(require("../services/CategoriesService"));
 const create = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, lastName, email, password, avatar } = req.body;
-    const { status, response } = yield UserService_1.default.create({
-        name, lastName, email, password, avatar,
-    });
-    return resp.status(status).json(response);
-});
-const login = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    const { status, response } = yield UserService_1.default.login({ email, password });
-    return resp.status(status).json(response);
-});
-const getUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
-    const { status, response } = yield UserService_1.default.getUser(authorization);
+    const { name } = req.body;
+    const { status, response } = yield CategoriesService_1.default.create(authorization, { name });
     return resp.status(status).json(response);
 });
-const updateUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const getAll = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
-    const { name, lastName, password, avatar } = req.body;
-    const { status, response } = yield UserService_1.default.updateUser(authorization, {
-        name, lastName, password, avatar,
-    });
+    const { status, response } = yield CategoriesService_1.default.getAll(authorization);
     return resp.status(status).json(response);
 });
-const deleteUser = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteC = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { authorization } = req.headers;
-    const { status, response } = yield UserService_1.default.deleteUser(authorization);
+    const { id } = req.params;
+    const data = { id: Number(id) };
+    const { status, response } = yield CategoriesService_1.default.deleteC(authorization, data);
     return resp.status(status).json(response);
 });
 exports.default = {
     create,
-    login,
-    getUser,
-    updateUser,
-    deleteUser,
+    getAll,
+    deleteC,
 };
