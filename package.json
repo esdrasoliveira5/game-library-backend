@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "npm run build && node ./dist/index.js",
+    "postinstall": "tsc",
     "debug": "nodemon --watch \"./src/**\" --ext \"ts,js\" --ignore \"src/**/*.spec.ts,src/**/*.json\" --exec \"ts-node src/index.ts\"",
     "dev": "tsnd ./src/index.ts",
     "build": "tsc"
