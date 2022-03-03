@@ -1,5 +1,6 @@
 import { User } from '@prisma/client';
 import StatusCode from '../enum/StatusCode';
+import initialCategories from '../helpers/createInitialCategories';
 import createValidation from '../helpers/createValidation';
 import loginValidate from '../helpers/loginValidate';
 import passwordCrypt from '../helpers/passwordCrypt';
@@ -19,11 +20,13 @@ const create = async (data: Omit<User, 'id'>): Promise<ResponseToken | ResponseE
   if (validation) return validation;
   
   const hashedPassword: string = await passwordCrypt.hashIt(password);
-  const { id }: User = await UserModel.create({
+  const user: User = await UserModel.create({
     name, lastName, email, password: hashedPassword, avatar,
   });
-  
-  const token: string = tokenGenerate(id, email);
+  const findData = { name: 'Sem categoria', userId: user.id };
+  await initialCategories(findData);
+
+  const token: string = tokenGenerate(user.id, email);
   return { status: StatusCode.CREATED, response: { token } };
 };
 

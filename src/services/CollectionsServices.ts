@@ -17,7 +17,7 @@ Promise<ResponseCollections | ResponseError> => {
   if ('status' in validationToken) return validationToken;
 
   const game: Games = await createGame(data);
-  const findData = { name: 'Sem Categoria', userId: validationToken.id };
+  const findData = { name: 'Sem categoria', userId: validationToken.id };
   const iCategory = await initialCategories(findData);
   
   const collectionData: Collections = {
